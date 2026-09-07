@@ -1,0 +1,6 @@
+interface:
+  display_name: "Понятный русский текст"
+  short_description: "Ясный и лаконичный русский текст"
+  default_prompt: "Используй $plain-russian-writing, чтобы написать понятный и лаконичный текст на русском языке."
+policy:
+  allow_implicit_invocation: true
