@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>QWERTY — шаблон внутреннего воркшопа</title>
+  <style>
+    :root {
+      --orange: #ff7900;
+      --ink: #000000;
+      --surface: #161616;
+      --raised: #232323;
+      --stroke: #383838;
+      --white: #ffffff;
+      --muted: #cecece;
+      --warm: #f2f1eb;
+      --light-surface: #ffffff;
+      --light-muted: #e9e7e0;
+      --light-ink: #1b1b1b;
+      --light-text: #686868;
+      --light-stroke: #d8d6cf;
+      --success: #77c66e;
+      --risk: #ff5c5c;
+      --font: "Inter Tight", Inter, Arial, sans-serif;
+      --radius: clamp(12px, 1.2vw, 20px);
+      --pad-x: clamp(44px, 6vw, 108px);
+      --pad-y: clamp(38px, 5vh, 74px);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    body {
+      color: var(--white);
+      font-family: var(--font);
+      font-size: clamp(16px, 1.3vw, 24px);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { font: inherit; }
+
+    .deck {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      isolation: isolate;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      overflow: hidden;
+      padding: var(--pad-y) var(--pad-x);
+      background: var(--ink);
+    }
+
+    .slide.active {
+      display: grid;
+      animation: enter 180ms ease-out both;
+    }
+
+    .slide.light {
+      color: var(--light-ink);
+      background: var(--warm);
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateX(10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide.active { animation: none; }
+    }
+
+    .slide::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      content: "";
+      background: linear-gradient(90deg, var(--orange) 0 11%, transparent 11%);
+    }
+
+    .slide.network::after {
+      position: absolute;
+      top: -34%;
+      right: -10%;
+      width: min(58vw, 840px);
+      aspect-ratio: 1;
+      content: "";
+      pointer-events: none;
+      opacity: .11;
+      background:
+        linear-gradient(32deg, transparent 48%, #fff 49% 49.4%, transparent 50%),
+        linear-gradient(142deg, transparent 48%, #fff 49% 49.4%, transparent 50%),
+        radial-gradient(circle at 36% 42%, #fff 0 3px, transparent 4px),
+        radial-gradient(circle at 65% 52%, #fff 0 3px, transparent 4px),
+        radial-gradient(circle at 51% 73%, #fff 0 3px, transparent 4px);
+      transform: rotate(-10deg);
+    }
+
+    .slide.light.network::after {
+      opacity: .07;
+      background:
+        linear-gradient(32deg, transparent 48%, #1b1b1b 49% 49.4%, transparent 50%),
+        linear-gradient(142deg, transparent 48%, #1b1b1b 49% 49.4%, transparent 50%),
+        radial-gradient(circle at 36% 42%, #1b1b1b 0 3px, transparent 4px),
+        radial-gradient(circle at 65% 52%, #1b1b1b 0 3px, transparent 4px),
+        radial-gradient(circle at 51% 73%, #1b1b1b 0 3px, transparent 4px);
+    }
+
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      width: 100%;
+      min-height: 0;
+    }
+
+    .topline,
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .footer { padding-right: 190px; }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--orange);
+      font-size: clamp(11px, .85vw, 15px);
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .duration,
+    .slide-no,
+    .source {
+      color: var(--muted);
+      font-size: clamp(11px, .8vw, 14px);
+      font-weight: 500;
+    }
+
+    .light .duration,
+    .light .slide-no,
+    .light .source { color: var(--light-text); }
+
+    .content {
+      display: grid;
+      align-content: center;
+      min-height: 0;
+      padding: clamp(26px, 4vh, 54px) 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    p { margin-top: 0; }
+
+    h1,
+    h2,
+    h3 {
+      font-weight: 700;
+      letter-spacing: -.035em;
+    }
+
+    h1 {
+      max-width: 11ch;
+      margin-bottom: clamp(24px, 3vh, 42px);
+      font-size: clamp(48px, 7.4vw, 112px);
+      line-height: .96;
+    }
+
+    h2 {
+      max-width: 18ch;
+      margin-bottom: clamp(24px, 3vh, 42px);
+      font-size: clamp(38px, 5vw, 76px);
+      line-height: 1;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: clamp(19px, 1.65vw, 28px);
+      line-height: 1.12;
+    }
+
+    p { color: var(--muted); }
+    .light p { color: var(--light-text); }
+
+    .lead {
+      max-width: 44ch;
+      margin-bottom: 0;
+      font-size: clamp(20px, 2.15vw, 34px);
+      line-height: 1.22;
+    }
+
+    .accent { color: var(--orange); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: clamp(14px, 1.7vw, 28px);
+      width: 100%;
+      min-height: 0;
+    }
+
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: 1 / -1; }
+
+    .card {
+      min-height: 0;
+      padding: clamp(18px, 2vw, 32px);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .card.raised {
+      background: var(--raised);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .28);
+    }
+
+    .light .card {
+      border-color: var(--light-stroke);
+      background: var(--light-surface);
+    }
+
+    .light .card.muted { background: var(--light-muted); }
+
+    .card p:last-child,
+    .card ul:last-child,
+    .card ol:last-child { margin-bottom: 0; }
+
+    .label {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--orange);
+      font-size: clamp(11px, .8vw, 14px);
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .big-number {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--orange);
+      font-size: clamp(52px, 6vw, 92px);
+      font-weight: 700;
+      letter-spacing: -.05em;
+      line-height: .88;
+    }
+
+    ul,
+    ol {
+      margin: 0;
+      padding-left: 1.25em;
+    }
+
+    li { margin-bottom: .45em; }
+    li:last-child { margin-bottom: 0; }
+    li::marker { color: var(--orange); }
+
+    .steps {
+      display: grid;
+      gap: 12px;
+      padding: 0;
+      list-style: none;
+      counter-reset: workshop-step;
+    }
+
+    .steps li {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      align-items: start;
+      gap: 14px;
+      margin: 0;
+      counter-increment: workshop-step;
+    }
+
+    .steps li::before {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 4px;
+      color: var(--light-ink);
+      background: var(--orange);
+      content: counter(workshop-step);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .choice {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .light .choice { border-color: var(--light-stroke); }
+    .choice:last-child { border-bottom: 0; }
+
+    .chip {
+      display: inline-flex;
+      min-height: 30px;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 4px;
+      color: var(--light-ink);
+      background: var(--orange);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .timebox {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 22px;
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .light .timebox { color: var(--light-ink); }
+
+    .timebox::before {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--orange);
+      content: "";
+    }
+
+    .checklist {
+      display: grid;
+      gap: 13px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      position: relative;
+      margin: 0;
+      padding-left: 34px;
+    }
+
+    .checklist li::before {
+      position: absolute;
+      top: .12em;
+      left: 0;
+      display: grid;
+      width: 22px;
+      height: 22px;
+      place-items: center;
+      border: 1px solid var(--orange);
+      border-radius: 3px;
+      color: var(--orange);
+      content: "✓";
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    .presenter-note { display: none; }
+
+    .notes-panel {
+      position: fixed;
+      z-index: 10;
+      right: 24px;
+      bottom: 72px;
+      display: none;
+      width: min(560px, calc(100vw - 48px));
+      max-height: 36vh;
+      overflow: auto;
+      padding: 22px 24px;
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      color: var(--white);
+      background: rgba(22, 22, 22, .97);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .45);
+      font-size: 15px;
+    }
+
+    .notes-panel.open { display: block; }
+    .notes-panel strong { color: var(--orange); }
+
+    .controls {
+      position: fixed;
+      z-index: 11;
+      right: 24px;
+      bottom: 20px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .controls button {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border: 1px solid var(--stroke);
+      border-radius: 4px;
+      color: var(--white);
+      background: rgba(22, 22, 22, .92);
+      cursor: pointer;
+    }
+
+    .controls button:hover,
+    .controls button:focus-visible {
+      outline: 2px solid var(--orange);
+      outline-offset: 2px;
+    }
+
+    .progress {
+      position: fixed;
+      z-index: 12;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--stroke);
+    }
+
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--orange);
+      transition: width 160ms ease-out;
+    }
+
+    .help {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, .78);
+    }
+
+    .help.open { display: grid; }
+
+    .help-card {
+      width: min(620px, 100%);
+      padding: 32px;
+      border: 1px solid var(--stroke);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .52);
+    }
+
+    kbd {
+      display: inline-block;
+      min-width: 28px;
+      padding: 3px 7px;
+      border: 1px solid var(--stroke);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      text-align: center;
+      background: var(--raised);
+      font: 500 13px var(--font);
+    }
+
+    @media (max-width: 900px), (max-height: 620px) {
+      :root {
+        --pad-x: 36px;
+        --pad-y: 30px;
+      }
+
+      body { font-size: 15px; }
+      .grid { gap: 12px; }
+      .card { padding: 16px; }
+      h1 { font-size: clamp(44px, 7vw, 76px); }
+      h2 { font-size: clamp(34px, 4.6vw, 56px); }
+      .controls { right: 12px; bottom: 12px; }
+      .footer { padding-right: 168px; }
+    }
+
+    @media (max-width: 680px) {
+      .span-4,
+      .span-5,
+      .span-6,
+      .span-7,
+      .span-8 { grid-column: 1 / -1; }
+
+      .grid { grid-template-columns: 1fr; }
+      .card.optional-mobile { display: none; }
+      .content { align-content: start; overflow: auto; }
+    }
+
+    @page {
+      size: 13.333in 7.5in;
+      margin: 0;
+    }
+
+    @media print {
+      html,
+      body {
+        width: auto;
+        height: auto;
+        overflow: visible;
+        background: white;
+      }
+
+      .deck { height: auto; }
+
+      .slide,
+      .slide.active {
+        position: relative;
+        display: grid !important;
+        width: 13.333in;
+        height: 7.5in;
+        break-after: page;
+        page-break-after: always;
+        animation: none;
+      }
+
+      .controls,
+      .progress,
+      .notes-panel,
+      .help { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="Презентация внутреннего воркшопа">
+    <!-- Удаляйте и переставляйте слайды по смыслу. Этот порядок показывает практический цикл, а не обязательную структуру. -->
+
+    <section class="slide network active" aria-label="Слайд 1: обложка">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">QWERTY · внутренний воркшоп</p>
+          <span class="duration">[60–120 минут]</span>
+        </header>
+        <div class="content">
+          <h1>[Рабочее действие] <span class="accent">без лишней теории</span></h1>
+          <p class="lead">[Для кого воркшоп и какой применимый результат останется после занятия]</p>
+        </div>
+        <footer class="footer">
+          <span class="source">[Дата · ведущий]</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Открытие.</strong> Назовите рабочую ситуацию, результат занятия и границы. Не пересказывайте повестку раньше, чем участники поймут, зачем им это действие.</aside>
+      </div>
+    </section>
+
+    <section class="slide light" aria-label="Слайд 2: контракт результата">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Контракт результата</p>
+          <span class="duration">3 минуты</span>
+        </header>
+        <div class="content">
+          <h2>После занятия участник выполняет <span class="accent">конкретное действие</span></h2>
+          <div class="grid">
+            <article class="card span-4">
+              <span class="label">Проблема</span>
+              <h3>[Что сейчас происходит не так]</h3>
+              <p>[Наблюдаемое последствие]</p>
+            </article>
+            <article class="card span-4">
+              <span class="label">Артефакт</span>
+              <h3>[Что останется]</h3>
+              <p>[Где это используют дальше]</p>
+            </article>
+            <article class="card span-4">
+              <span class="label">Готово, если</span>
+              <h3>[Порог качества]</h3>
+              <p>[3–7 наблюдаемых критериев]</p>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Не обещайте то, что не помещается в занятие</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Проверка ожиданий.</strong> Спросите, узнаёт ли группа проблему и есть ли у участников подходящий рабочий объект для практики.</aside>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Слайд 3: входное задание">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Первое действие</p>
+          <span class="duration">90 секунд</span>
+        </header>
+        <div class="content">
+          <div class="grid">
+            <div class="span-7">
+              <h2>Сначала участник <span class="accent">выбирает</span>, затем слушает объяснение</h2>
+              <p class="lead">[Дайте короткую ситуацию и попросите принять одно решение с критерием]</p>
+              <div class="timebox">Работайте самостоятельно · 90 секунд</div>
+            </div>
+            <article class="card raised span-5">
+              <span class="label">Ответьте</span>
+              <div class="choice"><span>[Вариант или решение A]</span><span class="chip">A</span></div>
+              <div class="choice"><span>[Вариант или решение B]</span><span class="chip">B</span></div>
+              <div class="choice"><span>[Свой вариант и критерий]</span><span class="chip">C</span></div>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Первое действие — не позже 10–15-й минуты</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Не раскрывайте ответ заранее.</strong> Соберите два разных решения и используйте расхождение как вход в демонстрацию.</aside>
+      </div>
+    </section>
+
+    <section class="slide network" aria-label="Слайд 4: демонстрация">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Короткая демонстрация</p>
+          <span class="duration">5–8 минут</span>
+        </header>
+        <div class="content">
+          <h2>Покажите решение целиком <span class="accent">до разбора деталей</span></h2>
+          <div class="grid">
+            <article class="card span-4">
+              <span class="big-number">01</span>
+              <h3>Вход</h3>
+              <p>[Какие данные и ограничения видит исполнитель]</p>
+            </article>
+            <article class="card raised span-4">
+              <span class="big-number">02</span>
+              <h3>Ключевое решение</h3>
+              <p>[Что нужно заметить и по какому критерию выбрать]</p>
+            </article>
+            <article class="card span-4">
+              <span class="big-number">03</span>
+              <h3>Готовый результат</h3>
+              <p>[Как выглядит результат, пригодный для работы]</p>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Источник модели: [автор или организация · прямая ссылка]</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Демонстрируйте мышление.</strong> Проговорите не все шаги, а решения, которые участнику скоро предстоит повторить.</aside>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Слайд 5: практика с опорой">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Практика с опорой</p>
+          <span class="duration">10–15 минут</span>
+        </header>
+        <div class="content">
+          <div class="grid">
+            <div class="span-5">
+              <h2>Дайте одну опору и <span class="accent">одно решение</span></h2>
+              <p class="lead">[Участник повторяет ключевую часть действия на общем случае]</p>
+            </div>
+            <article class="card span-7">
+              <span class="label">Инструкция</span>
+              <ol class="steps">
+                <li><span><strong>Изучите</strong> [короткие исходные данные].</span></li>
+                <li><span><strong>Выберите</strong> [вариант] по [критерию].</span></li>
+                <li><span><strong>Запишите</strong> решение в [формате результата].</span></li>
+                <li><span><strong>Проверьте</strong> по [двум признакам].</span></li>
+              </ol>
+              <div class="timebox">[12 минут] · результат: [один законченный фрагмент]</div>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Одна инструкция — одно наблюдаемое действие</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Перед стартом.</strong> Попросите одного участника пересказать действие и ожидаемый результат. Исправьте инструкцию, если её понимают по-разному.</aside>
+      </div>
+    </section>
+
+    <section class="slide light" aria-label="Слайд 6: основная практика">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Основная практика</p>
+          <span class="duration">20–30 минут</span>
+        </header>
+        <div class="content">
+          <h2>К первой трети занятия участник уже <span class="accent">создаёт результат</span></h2>
+          <div class="grid">
+            <article class="card span-8">
+              <span class="label">Работайте на своём объекте</span>
+              <ol class="steps">
+                <li><span>Выберите [реальную задачу, документ, процесс или разговор].</span></li>
+                <li><span>Создайте первый вариант [основного артефакта].</span></li>
+                <li><span>Отметьте место, где не хватает данных или полномочий.</span></li>
+                <li><span>Подготовьте результат к проверке по критериям.</span></li>
+              </ol>
+            </article>
+            <article class="card muted span-4">
+              <span class="label">На выходе</span>
+              <h3>[Черновик, который можно использовать]</h3>
+              <p>Не пустой шаблон и не обещание заполнить позже.</p>
+              <div class="timebox">[25 минут]</div>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Для закрытых данных используйте обезличенный объект той же сложности</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Во время работы.</strong> Не читайте новую теорию. Отслеживайте повторяющиеся затруднения и вынесите одно из них в общий разбор.</aside>
+      </div>
+    </section>
+
+    <section class="slide light" aria-label="Слайд 7: шаблон артефакта">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Рабочий артефакт</p>
+          <span class="duration">Используется после занятия</span>
+        </header>
+        <div class="content">
+          <div class="grid">
+            <div class="span-5">
+              <h2>Шаблон должен жить <span class="accent">в рабочем процессе</span></h2>
+              <p class="lead">[Название артефакта и момент его использования]</p>
+            </div>
+            <article class="card span-7">
+              <div class="choice"><strong>Контекст</strong><span>[Где применяется]</span></div>
+              <div class="choice"><strong>Решение</strong><span>[Что выбрано]</span></div>
+              <div class="choice"><strong>Критерий</strong><span>[Почему это работает]</span></div>
+              <div class="choice"><strong>Владелец</strong><span>[Кто продолжает]</span></div>
+              <div class="choice"><strong>Проверка</strong><span>[Как подтвердить]</span></div>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Подстройте поля под реальный документ или систему</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Материал участника.</strong> В рабочей версии этого слайда дайте ссылку на редактируемый шаблон и отдельный заполненный пример.</aside>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Слайд 8: проверка качества">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Обратная связь</p>
+          <span class="duration">10–18 минут</span>
+        </header>
+        <div class="content">
+          <h2>Проверяйте результат по <span class="accent">наблюдаемым критериям</span></h2>
+          <div class="grid">
+            <article class="card span-7">
+              <span class="label">Готово, если</span>
+              <ul class="checklist">
+                <li>[Критерий можно проверить без догадки]</li>
+                <li>[Решение учитывает реальные ограничения]</li>
+                <li>[Есть владелец или получатель результата]</li>
+                <li>[Следующий шаг и доказательство указаны]</li>
+              </ul>
+            </article>
+            <article class="card raised span-5">
+              <span class="label">Формула комментария</span>
+              <h3>Наблюдение → последствие → одно изменение</h3>
+              <p>«В результате нет [факт]. Из-за этого [последствие]. Добавьте [конкретное изменение]».</p>
+              <div class="timebox">[6 минут на проверку]</div>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Взаимная оценка уместна только при понятных критериях и безопасных данных</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Калибровка.</strong> Перед работой в парах проверьте один пример всей группой, чтобы участники одинаково понимали критерии.</aside>
+      </div>
+    </section>
+
+    <section class="slide network" aria-label="Слайд 9: доработка">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Доработка</p>
+          <span class="duration">8–15 минут</span>
+        </header>
+        <div class="content">
+          <h2>Обратная связь ценна, когда участник <span class="accent">исправляет результат</span></h2>
+          <div class="grid">
+            <article class="card span-4">
+              <span class="big-number">1</span>
+              <h3>Выберите разрыв</h3>
+              <p>[Какое замечание сильнее всего влияет на применение]</p>
+            </article>
+            <article class="card raised span-4">
+              <span class="big-number">2</span>
+              <h3>Исправьте</h3>
+              <p>[Что именно участник меняет в артефакте]</p>
+            </article>
+            <article class="card span-4">
+              <span class="big-number">3</span>
+              <h3>Проверьте снова</h3>
+              <p>[Какой критерий теперь выполнен]</p>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Минимум один цикл: сделал → проверил → исправил</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Остановите обсуждение.</strong> Оставьте участникам реальное время на изменение артефакта. Не заменяйте доработку устным обещанием.</aside>
+      </div>
+    </section>
+
+    <section class="slide light" aria-label="Слайд 10: перенос в работу">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Перенос в работу</p>
+          <span class="duration">5–10 минут</span>
+        </header>
+        <div class="content">
+          <h2>Применение запланировано <span class="accent">до завершения занятия</span></h2>
+          <div class="grid">
+            <article class="card span-4">
+              <span class="label">Где и когда</span>
+              <h3>[Следующий рабочий момент]</h3>
+              <p>[Дата или событие запуска]</p>
+            </article>
+            <article class="card span-4">
+              <span class="label">Кто поддержит</span>
+              <h3>[Владелец или проверяющий]</h3>
+              <p>[Какую обратную связь он даст]</p>
+            </article>
+            <article class="card span-4">
+              <span class="label">Чем доказать</span>
+              <h3>[Наблюдаемое подтверждение]</h3>
+              <p>[Ссылка, запись, изменение или тест]</p>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Укажите один следующий шаг, а не список намерений</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Фиксация.</strong> Дайте участникам минуту записать обязательство в рабочую систему или календарь. Общая формулировка «попробую» не подходит.</aside>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Слайд 11: выводы">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Ключевые выводы</p>
+          <span class="duration">2 минуты</span>
+        </header>
+        <div class="content">
+          <div class="grid">
+            <div class="span-5">
+              <h2>Закрепите не тему, а <span class="accent">способ действия</span></h2>
+            </div>
+            <article class="card span-7">
+              <ul class="checklist">
+                <li>[Когда применять новый способ]</li>
+                <li>[Какое решение является ключевым]</li>
+                <li>[Как выглядит готовый результат]</li>
+                <li>[Как обнаружить и исправить ошибку]</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+        <footer class="footer">
+          <span class="source">Повторяйте только то, что помогает следующему применению</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Закрепление.</strong> Попросите участников назвать не понравившуюся идею, а одно изменение, которое они уже внесли в свой результат.</aside>
+      </div>
+    </section>
+
+    <section class="slide network" aria-label="Слайд 12: завершение">
+      <div class="slide-inner">
+        <header class="topline">
+          <p class="eyebrow">Следующий шаг</p>
+          <span class="duration">Воркшоп завершён</span>
+        </header>
+        <div class="content">
+          <h1>[Действие] <span class="accent">назначено</span></h1>
+          <p class="lead">[Кто · что применяет · когда · какое доказательство оставляет]</p>
+          <p class="timebox">[Ссылка на рабочий шаблон или следующий модуль] <span class="arrow">↗</span></p>
+        </div>
+        <footer class="footer">
+          <span class="source">QWERTY · внутреннее обучение</span>
+          <span class="slide-no"></span>
+        </footer>
+        <aside class="presenter-note"><strong>Закрытие.</strong> Назовите контрольное событие после занятия. Если воркшоп входит в программу, покажите, какой артефакт станет входом следующего модуля.</aside>
+      </div>
+    </section>
+  </main>
+
+  <aside class="notes-panel" id="notesPanel" aria-live="polite"></aside>
+
+  <nav class="controls" aria-label="Управление презентацией">
+    <button type="button" id="prev" aria-label="Предыдущий слайд">←</button>
+    <button type="button" id="notes" aria-label="Показать заметки ведущего">N</button>
+    <button type="button" id="helpButton" aria-label="Показать подсказку">?</button>
+    <button type="button" id="next" aria-label="Следующий слайд">→</button>
+  </nav>
+
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <div class="help" id="help" role="dialog" aria-modal="true" aria-label="Управление презентацией">
+    <div class="help-card">
+      <p class="eyebrow">Управление</p>
+      <h3>Клавиши презентации</h3>
+      <p><kbd>←</kbd> <kbd>→</kbd> — слайды · <kbd>Home</kbd> <kbd>End</kbd> — начало и конец</p>
+      <p><kbd>N</kbd> — заметки ведущего · <kbd>F</kbd> — полный экран · <kbd>?</kbd> — эта подсказка</p>
+      <p><kbd>Esc</kbd> — закрыть подсказку или заметки</p>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const progressBar = document.getElementById('progressBar');
+      const notesPanel = document.getElementById('notesPanel');
+      const help = document.getElementById('help');
+      let index = 0;
+
+      const clamp = (value) => Math.max(0, Math.min(slides.length - 1, value));
+
+      function render(nextIndex, updateHash = true) {
+        index = clamp(nextIndex);
+        slides.forEach((slide, position) => {
+          const active = position === index;
+          slide.classList.toggle('active', active);
+          slide.setAttribute('aria-hidden', String(!active));
+          slide.querySelectorAll('.slide-no').forEach((node) => {
+            node.textContent = `${position + 1} / ${slides.length}`;
+          });
+        });
+
+        progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+        const note = slides[index].querySelector('.presenter-note');
+        notesPanel.innerHTML = note ? note.innerHTML : '<strong>Заметок нет.</strong>';
+        if (updateHash) history.replaceState(null, '', `#${index + 1}`);
+        document.title = `${index + 1}/${slides.length} · QWERTY — шаблон воркшопа`;
+      }
+
+      function toggleNotes(force) {
+        const open = typeof force === 'boolean' ? force : !notesPanel.classList.contains('open');
+        notesPanel.classList.toggle('open', open);
+      }
+
+      function toggleHelp(force) {
+        const open = typeof force === 'boolean' ? force : !help.classList.contains('open');
+        help.classList.toggle('open', open);
+      }
+
+      function initialIndex() {
+        const value = Number.parseInt(location.hash.slice(1), 10);
+        return Number.isFinite(value) ? clamp(value - 1) : 0;
+      }
+
+      document.getElementById('prev').addEventListener('click', () => render(index - 1));
+      document.getElementById('next').addEventListener('click', () => render(index + 1));
+      document.getElementById('notes').addEventListener('click', () => toggleNotes());
+      document.getElementById('helpButton').addEventListener('click', () => toggleHelp());
+      help.addEventListener('click', (event) => {
+        if (event.target === help) toggleHelp(false);
+      });
+
+      document.addEventListener('keydown', async (event) => {
+        if (event.key === 'Escape') {
+          toggleHelp(false);
+          toggleNotes(false);
+          return;
+        }
+
+        if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') {
+          event.preventDefault();
+          render(index + 1);
+        } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+          event.preventDefault();
+          render(index - 1);
+        } else if (event.key === 'Home') {
+          render(0);
+        } else if (event.key === 'End') {
+          render(slides.length - 1);
+        } else if (event.key.toLowerCase() === 'n') {
+          toggleNotes();
+        } else if (event.key === '?') {
+          toggleHelp();
+        } else if (event.key.toLowerCase() === 'f') {
+          if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
+          else await document.exitFullscreen?.();
+        }
+      });
+
+      window.addEventListener('hashchange', () => render(initialIndex(), false));
+      render(initialIndex(), false);
+    })();
+  </script>
+</body>
+</html>

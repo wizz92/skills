@@ -1,0 +1,265 @@
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/inter-tight-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/inter-tight-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/inter-tight-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --q-orange: #ff7900;
+  --q-ink: #000000;
+  --q-surface: #161616;
+  --q-surface-raised: #232323;
+  --q-stroke: #383838;
+  --q-white: #ffffff;
+  --q-muted: #cecece;
+  --q-warm: #f2f1eb;
+  --q-surface-light: #ffffff;
+  --q-surface-light-muted: #e9e7e0;
+  --q-ink-soft: #1b1b1b;
+  --q-text-light-muted: #686868;
+  --q-stroke-light: #d8d6cf;
+  --q-font: "Inter Tight", Inter, Arial, sans-serif;
+  --q-r-sm: 4px;
+  --q-r-card: 16px;
+  --q-r-panel: 24px;
+  --q-shadow-dark: 0 12px 32px rgba(0, 0, 0, 0.28);
+  --q-shadow-light: 0 10px 28px rgba(22, 22, 22, 0.1);
+}
+
+* { box-sizing: border-box; }
+
+body.qwerty {
+  margin: 0;
+  color: var(--q-white);
+  background: var(--q-ink);
+  font-family: var(--q-font);
+  font-size: 18px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.qwerty.light {
+  color: var(--q-ink-soft);
+  background: var(--q-warm);
+}
+
+.qwerty.light p { color: var(--q-text-light-muted); }
+
+.q-shell {
+  width: min(1280px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.q-section { padding: clamp(64px, 9vw, 128px) 0; }
+
+.q-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.q-eyebrow {
+  color: var(--q-orange);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.q-title {
+  max-width: 980px;
+  margin: 0;
+  font-size: clamp(48px, 7.5vw, 108px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.q-title .accent, .q-accent { color: var(--q-orange); }
+
+.q-subtitle {
+  max-width: 720px;
+  margin: 24px 0 0;
+  color: var(--q-muted);
+  font-size: clamp(20px, 2.4vw, 32px);
+  line-height: 1.2;
+}
+
+.light .q-subtitle { color: var(--q-text-light-muted); }
+
+.q-card {
+  padding: 28px;
+  border: 1px solid var(--q-stroke);
+  border-radius: var(--q-r-card);
+  background: var(--q-surface);
+}
+
+.light .q-card {
+  border-color: var(--q-stroke-light);
+  background: var(--q-surface-light);
+}
+
+.q-card.raised {
+  background: var(--q-surface-raised);
+  box-shadow: var(--q-shadow-dark);
+}
+
+.light .q-card.raised {
+  background: var(--q-surface-light);
+  box-shadow: var(--q-shadow-light);
+}
+
+.light .q-card.muted {
+  background: var(--q-surface-light-muted);
+  box-shadow: none;
+}
+
+.q-kpi {
+  margin: 0;
+  color: var(--q-orange);
+  font-size: clamp(56px, 7vw, 92px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.q-label {
+  margin-top: 16px;
+  color: var(--q-muted);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.light .q-label { color: var(--q-text-light-muted); }
+
+.q-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: var(--q-r-sm);
+  color: var(--q-ink-soft);
+  background: var(--q-orange);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.q-rule { height: 1px; background: var(--q-stroke); }
+.light .q-rule { background: var(--q-stroke-light); }
+
+.q-arrow { color: var(--q-orange); font-weight: 500; }
+
+.q-network {
+  position: relative;
+  overflow: hidden;
+}
+
+.q-network::after {
+  position: absolute;
+  inset: -20% -8% auto auto;
+  width: min(54vw, 720px);
+  aspect-ratio: 1;
+  content: "";
+  pointer-events: none;
+  opacity: 0.14;
+  background:
+    linear-gradient(32deg, transparent 47%, #fff 48% 49%, transparent 50%),
+    linear-gradient(142deg, transparent 47%, #fff 48% 49%, transparent 50%),
+    radial-gradient(circle at 40% 40%, #fff 0 2px, transparent 3px),
+    radial-gradient(circle at 67% 52%, #fff 0 2px, transparent 3px),
+    radial-gradient(circle at 52% 72%, #fff 0 2px, transparent 3px);
+  transform: rotate(-9deg);
+}
+
+.light .q-network::after {
+  opacity: 0.08;
+  background:
+    linear-gradient(32deg, transparent 47%, #1b1b1b 48% 49%, transparent 50%),
+    linear-gradient(142deg, transparent 47%, #1b1b1b 48% 49%, transparent 50%),
+    radial-gradient(circle at 40% 40%, #1b1b1b 0 2px, transparent 3px),
+    radial-gradient(circle at 67% 52%, #1b1b1b 0 2px, transparent 3px),
+    radial-gradient(circle at 52% 72%, #1b1b1b 0 2px, transparent 3px);
+}
+
+.q-logo-plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  min-height: 88px;
+  padding: 20px;
+  border-radius: var(--q-r-sm);
+  background: var(--q-ink);
+}
+
+.q-logo-plate img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.q-dark-band {
+  color: var(--q-white);
+  background: var(--q-ink);
+}
+
+.q-dark-band p, .q-dark-band .q-label { color: var(--q-muted); }
+
+.q-note {
+  padding: 20px 24px;
+  border-left: 4px solid var(--q-orange);
+  border-radius: 0 var(--q-r-card) var(--q-r-card) 0;
+  background: var(--q-surface-raised);
+}
+
+.light .q-note {
+  background: var(--q-surface-light-muted);
+}
+
+.q-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.q-table th, .q-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--q-stroke);
+  text-align: left;
+}
+
+.light .q-table th, .light .q-table td { border-color: var(--q-stroke-light); }
+.q-table th { font-weight: 500; }
+.q-table .key td:first-child { border-left: 3px solid var(--q-orange); }
+
+@media (max-width: 760px) {
+  body.qwerty { font-size: 16px; }
+  .q-shell { width: min(100% - 32px, 1280px); }
+  .q-grid { grid-template-columns: 1fr; gap: 16px; }
+  .q-grid > * { grid-column: 1 / -1 !important; }
+  .q-card { padding: 22px; }
+}
+
+@media print {
+  body.qwerty { color: #1b1b1b; background: white; font-size: 11pt; }
+  .q-card, .q-card.raised { color: #1b1b1b; background: white; box-shadow: none; border-color: #d8d6cf; }
+  .q-network::after { display: none; }
+}

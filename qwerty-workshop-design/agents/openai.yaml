@@ -1,0 +1,5 @@
+interface:
+  display_name: "QWERTY Workshop Design"
+  short_description: "Практические воркшопы QWERTY до 120 минут"
+  brand_color: "#FF7900"
+  default_prompt: "Используй $qwerty-workshop-design, чтобы спроектировать внутренний воркшоп с практикой на реальной рабочей задаче."

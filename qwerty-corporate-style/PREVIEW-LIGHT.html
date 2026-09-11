@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QWERTY — светлая корпоративная тема</title>
+  <link rel="stylesheet" href="assets/qwerty-theme.css">
+  <style>
+    .topbar { min-height: 104px; display: flex; align-items: center; }
+    .topbar .q-shell { display: flex; justify-content: space-between; align-items: center; }
+    .topbar img { width: 34px; height: auto; }
+    .meta { color: #cecece; font-size: 14px; font-weight: 500; letter-spacing: .04em; }
+    header { min-height: 610px; display: grid; align-items: center; }
+    .metric { grid-column: span 4; min-height: 230px; display: flex; flex-direction: column; justify-content: space-between; }
+    .finding { grid-column: span 7; }
+    .decision { grid-column: span 5; color: #fff; background: #161616 !important; border-color: #161616 !important; }
+    .decision p { color: #cecece !important; }
+    h2 { margin: 0 0 28px; font-size: clamp(36px, 5vw, 64px); line-height: 1; }
+    h3 { margin: 0 0 14px; font-size: 28px; line-height: 1.1; }
+    .bar-row { display: grid; grid-template-columns: 140px 1fr 52px; gap: 16px; align-items: center; margin-top: 18px; }
+    .bar { height: 12px; overflow: hidden; border-radius: 2px; background: #e9e7e0; }
+    .bar > span { display: block; height: 100%; background: #ff7900; }
+    footer { padding: 56px 0; }
+    footer img { width: 220px; height: auto; }
+    @media (max-width: 760px) {
+      .topbar { min-height: 88px; }
+      .metric, .finding, .decision { grid-column: 1 / -1; }
+      .bar-row { grid-template-columns: 96px 1fr 44px; gap: 10px; }
+    }
+  </style>
+</head>
+<body class="qwerty light">
+  <div class="topbar q-dark-band">
+    <div class="q-shell">
+      <img src="assets/qwerty-mark.svg" alt="QWERTY">
+      <div class="meta">УПРАВЛЕНЧЕСКИЙ ОТЧЁТ · II КВАРТАЛ</div>
+    </div>
+  </div>
+
+  <header class="q-network">
+    <div class="q-shell">
+      <div class="q-eyebrow">Главный вывод</div>
+      <h1 class="q-title"><span class="accent">Рост</span> стал устойчивым</h1>
+      <p class="q-subtitle">Три показателя выше плана. Следующий шаг — снять ограничение в канале привлечения.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="q-section">
+      <div class="q-shell">
+        <div class="q-eyebrow">Ключевые показатели</div>
+        <h2>Главное видно сразу</h2>
+        <div class="q-grid">
+          <article class="q-card metric">
+            <div class="q-kpi">+18%</div>
+            <div class="q-label">выручка к прошлому кварталу</div>
+          </article>
+          <article class="q-card metric raised">
+            <div class="q-kpi">94%</div>
+            <div class="q-label">выполнение квартального плана</div>
+          </article>
+          <article class="q-card metric muted">
+            <div class="q-kpi">3,2×</div>
+            <div class="q-label">возврат инвестиций в лидогенерацию</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="q-section">
+      <div class="q-shell q-grid">
+        <article class="q-card finding">
+          <span class="q-chip">Факт</span>
+          <h3 style="margin-top:24px">Органика растёт быстрее платного канала</h3>
+          <p>Доля органического трафика достигла 46%. Это снижает стоимость привлечения и делает рост устойчивее.</p>
+          <div class="bar-row"><span>Органика</span><div class="bar"><span style="width:82%"></span></div><b>46%</b></div>
+          <div class="bar-row"><span>Платный</span><div class="bar"><span style="width:59%;background:#1b1b1b"></span></div><b>33%</b></div>
+          <div class="bar-row"><span>Прямой</span><div class="bar"><span style="width:38%;background:#8f8f8f"></span></div><b>21%</b></div>
+        </article>
+        <aside class="q-card decision">
+          <div class="q-eyebrow">Решение</div>
+          <h3 style="margin-top:24px">Ускорить выпуск экспертного контента</h3>
+          <p>Владелец: Marketing Lead<br>Срок: 30 сентября<br>Контроль: еженедельно</p>
+          <div class="q-rule" style="margin:28px 0"></div>
+          <strong class="q-arrow">Следующий шаг ↗</strong>
+        </aside>
+      </div>
+    </section>
+
+    <section class="q-section">
+      <div class="q-shell">
+        <div class="q-note"><strong>Риск:</strong> без роста производственной мощности органический канал выйдет на плато в октябре.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="q-dark-band">
+    <div class="q-shell"><img src="assets/qwerty-wordmark.svg" alt="QWERTY Software"></div>
+  </footer>
+</body>
+</html>
