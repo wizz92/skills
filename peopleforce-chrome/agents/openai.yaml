@@ -1,0 +1,4 @@
+interface:
+  display_name: "PeopleForce via Chrome"
+  short_description: "Точная работа с PeopleForce через Chrome"
+  default_prompt: "Используй $peopleforce-chrome и выполни задачу по прямому маршруту в интерфейсе PeopleForce."
