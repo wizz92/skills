@@ -1,0 +1,4 @@
+interface:
+  display_name: "Проверка PDP"
+  short_description: "Оценка качества PDP и работы с ним"
+  default_prompt: "Используй $pdp-review, чтобы проверить мой PDP, оценить его по шкале 1–5 и дать конкретную обратную связь."
